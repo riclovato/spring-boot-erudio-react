@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 
 import "./styles.css";
@@ -35,7 +35,7 @@ export default function NewBook() {
       setLaunchDate(adjustedDate);
     } catch (error) {
       alert("Error recovering book,Try again!");
-      history.push("/books");
+      navigate("/books");
     }
   }
 
@@ -47,7 +47,7 @@ export default function NewBook() {
     }
   }, [bookId]);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   async function saveOrUpdate(e) {
     e.preventDefault();
@@ -75,7 +75,7 @@ export default function NewBook() {
         });
       }
 
-      history.push("/books");
+      navigate("/books");
     } catch (error) {
       alert("Error creating book,Try again!");
     }
