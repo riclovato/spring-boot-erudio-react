@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import api from '../../services/api';
 
@@ -21,6 +21,36 @@ export default function NewBook(){
 
     const username =localStorage.getItem('username');
     const accessToken = localStorage.getItem('accessToken');
+
+    async function loadBook(){
+         try {
+            const response = await api.get(`api/book/v1/${bookId}`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+
+                let adjustedDate = response.data.launchDate.split("T",10)[0];
+                setId(response.data.id);
+                setTitle(response.data.title);
+                setAuthor(response.data.author);
+                setPrice(response.data.price);
+                setLaunchDate(adjustedDate);
+            
+         } catch (error) {
+            alert('Error recovering book,Try again!')
+            history.push('/books');
+         }
+    }
+
+
+    useEffect(()  => {
+        if(bookId === '0'){
+              return;
+        }else{
+             loadBook();
+        }
+    }, [bookId])
 
 
     const history =  useHistory();
